@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 import { Product } from "../models/product"
+import { Catalog } from "../../features/catalog/Catalog"
+import { Typography } from "@mui/material"
 
 function App() {
 
@@ -13,13 +15,8 @@ function App() {
 
   return (
     <div>
-      <ul>
-        {products.map((product) => (
-          <li key={product.id}>
-            {product.name} - {product.price}
-          </li>
-        ))}
-      </ul>
+      <Typography variant="h1">Mega Catalog</Typography>
+      <Catalog products={products} />
     </div>
   )
 }
