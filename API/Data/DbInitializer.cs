@@ -23,7 +23,7 @@ namespace API.Data
                 },
                 new Product
                 {
-                    Name = "Green Valios Board 3000",
+                    Name = "Valios Pegasus Board 3000",
                     Description = "Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus.",
                     Price = 15000,
                     PictureUrl = "/images/products/sb-ang2.png",
@@ -33,7 +33,7 @@ namespace API.Data
                 },
                 new Product
                 {
-                    Name = "Noco Board Speed Rush 3",
+                    Name = "Noco Speed Rusher 3",
                     Description =
                         "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
                     Price = 18000,
@@ -44,7 +44,7 @@ namespace API.Data
                 },
                 new Product
                 {
-                    Name = "Noco Super Board",
+                    Name = "Noco XtremeGrip Board",
                     Description =
                         "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.",
                     Price = 30000,
@@ -66,7 +66,7 @@ namespace API.Data
                 },
                 new Product
                 {
-                    Name = "Moll Entry Board",
+                    Name = "StarGazer Board",
                     Description =
                         "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                     Price = 12000,
@@ -77,40 +77,62 @@ namespace API.Data
                 },
                 new Product
                 {
-                    Name = "Core Blue Hat",
+                    Name = "SpeedChaser Helm",
                     Description =
                         "Noco posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                     Price = 1000,
-                    PictureUrl = "/images/products/hat-core1.png",
+                    PictureUrl = "/images/products/helm-core1.png",
                     Brand = "Noco",
-                    Type = "Hats",
+                    Type = "Helmets",
                     QuantityInStock = 100
                 },
                 new Product
                 {
-                    Name = "Green React Woolen Hat",
+                    Name = "BloodMoon Runner",
                     Description =
                         "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                     Price = 8000,
-                    PictureUrl = "/images/products/hat-react1.png",
+                    PictureUrl = "/images/products/helm-react1.png",
                     Brand = "Noco",
-                    Type = "Hats",
+                    Type = "Helments",
                     QuantityInStock = 100
                 },
                 new Product
                 {
-                    Name = "Purple Woolen Hat",
+                    Name = "Arctic Shock 3000",
                     Description =
                         "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                     Price = 1500,
-                    PictureUrl = "/images/products/hat-react2.png",
+                    PictureUrl = "/images/products/helm-react2.png",
                     Brand = "Noco",
-                    Type = "Hats",
+                    Type = "Helmets",
                     QuantityInStock = 100
                 },
                 new Product
                 {
-                    Name = "Blue Gloves",
+                    Name = "Instant Death II",
+                    Description =
+                        "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
+                    Price = 1500,
+                    PictureUrl = "/images/products/helm-react3.png",
+                    Brand = "Noco",
+                    Type = "Helmets",
+                    QuantityInStock = 100
+                },
+                new Product
+                {
+                    Name = "Frozen Shaman",
+                    Description =
+                        "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
+                    Price = 1500,
+                    PictureUrl = "/images/products/helm-react4.png",
+                    Brand = "Noco",
+                    Type = "Helments",
+                    QuantityInStock = 100
+                },
+                new Product
+                {
+                    Name = "BeetleIce 2003",
                     Description =
                         "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                     Price = 1800,
@@ -121,7 +143,7 @@ namespace API.Data
                 },
                 new Product
                 {
-                    Name = "Green Code Gloves",
+                    Name = "HazelGold Dreamer Gloves",
                     Description =
                         "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                     Price = 1500,
@@ -132,7 +154,7 @@ namespace API.Data
                 },
                 new Product
                 {
-                    Name = "Kava Fleese Gloves",
+                    Name = "Kava BackSlap Copper",
                     Description =
                         "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                     Price = 1600,
@@ -143,7 +165,7 @@ namespace API.Data
                 },
                 new Product
                 {
-                    Name = "Green Ski Gloves",
+                    Name = "Skirrra Razer Gloves",
                     Description =
                         "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                     Price = 1400,
@@ -165,7 +187,7 @@ namespace API.Data
                 },
                 new Product
                 {
-                    Name = "Moll Red Boots",
+                    Name = "Moll RedMoon Dancer",
                     Description =
                         "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                     Price = 18999,
@@ -176,7 +198,7 @@ namespace API.Data
                 },
                 new Product
                 {
-                    Name = "Kava Killer Boots",
+                    Name = "Kava Killer Stomp",
                     Description =
                         "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.",
                     Price = 19999,
@@ -187,7 +209,7 @@ namespace API.Data
                 },
                 new Product
                 {
-                    Name = "Moll Purple Boots",
+                    Name = "NopPain NoGain Boots",
                     Description = "Aenean nec lorem. In porttitor. Donec laoreet nonummy augue.",
                     Price = 15000,
                     PictureUrl = "/images/products/boot-ang2.png",
@@ -197,7 +219,7 @@ namespace API.Data
                 },
                 new Product
                 {
-                    Name = "Valios Blue Boots",
+                    Name = "Valios Moon Walker Boots",
                     Description =
                         "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
                     Price = 18000,
