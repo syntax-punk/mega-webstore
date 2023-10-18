@@ -1,8 +1,16 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 axios.defaults.baseURL = 'http://localhost:5000/api/';
 
 const responseBody = (response: AxiosResponse) => response.data;
+
+axios.interceptors.response.use(
+  response => {  return response; }, 
+  (error: AxiosError) => { 
+    console.log('Caught by interceptor -> ' + error.message);
+    return Promise.reject(error.response);
+  }
+)
 
 const requests = {
   get: (url: string) => axios.get(url).then(responseBody),
@@ -17,11 +25,11 @@ const Catalog = {
 } as const;
 
 const TestErrors = {
-  get400: () => requests.get('buddy/bad-request'),
-  get401: () => requests.get('buddy/unauthorized'),
-  get404: () => requests.get('buddy/not-found'),
-  get500: () => requests.get('buddy/server-error'),
-  getValidationError: () => requests.get('buddy/validation-error'),
+  get400: () => requests.get('buggy/bad-request'),
+  get401: () => requests.get('buggy/unauthorized'),
+  get404: () => requests.get('buggy/not-found'),
+  get500: () => requests.get('buggy/server-error'),
+  getValidationError: () => requests.get('buggy/validation-error'),
 }
 
 const agent = {

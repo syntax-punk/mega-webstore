@@ -11,7 +11,7 @@ function ProductDetails() {
 
   useEffect(function fetchProduct() {
     if (!id) return;
-    
+
     agent.Catalog.details(parseInt(id))
       .then(response => setProduct(response))
       .catch((error) => console.log(error))
