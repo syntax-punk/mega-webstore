@@ -2,7 +2,7 @@ import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, T
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Product } from "../../app/models/product";
-import axios from "axios";
+import { agent } from "../../app/api/agent";
 
 function ProductDetails() {
   const { id } = useParams<{ id: string }>();
@@ -10,8 +10,10 @@ function ProductDetails() {
   const [loading, setLoading] = useState(true);
 
   useEffect(function fetchProduct() {
-    axios.get<Product>(`http://localhost:5000/api/products/${id}`)
-      .then((response) => setProduct(response.data))
+    if (!id) return;
+    
+    agent.Catalog.details(parseInt(id))
+      .then(response => setProduct(response))
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
   }, [id]);
