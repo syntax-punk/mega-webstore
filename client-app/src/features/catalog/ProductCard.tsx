@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { agent } from "../../app/api/agent";
 import { LoadingButton } from "@mui/lab";
+import { useStoreContext } from "../../app/context/StoreContext";
+import { Basket } from "../../app/models/basket";
 
 interface Props {
   product: Product;
@@ -11,10 +13,12 @@ interface Props {
 
 function ProductCard({ product }: Props) {
     const [loading, setLoading] = useState(false);
+    const { setBasket } = useStoreContext();
 
     function handleAddItemToCart(productId: number) {
       setLoading(true);
-      agent.Basket.addItem(productId).then(() => {
+      agent.Basket.addItem(productId).then((basket: Basket) => {
+        setBasket(basket);
         console.log('Item added to cart');
       })
       .catch(error => {
