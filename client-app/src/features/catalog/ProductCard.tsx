@@ -6,6 +6,7 @@ import { agent } from "../../app/api/agent";
 import { LoadingButton } from "@mui/lab";
 import { useStoreContext } from "../../app/context/StoreContext";
 import { Basket } from "../../app/models/basket";
+import { currencyFormat } from "../../app/utils/misc";
 
 interface Props {
   product: Product;
@@ -41,7 +42,7 @@ function ProductCard({ product }: Props) {
             {product.name}
           </Typography>
           <Typography color="secondary" gutterBottom variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-            $ {(product.price / 100).toFixed(2)}
+            {currencyFormat(product.price)}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {product.brand} / {product.type}

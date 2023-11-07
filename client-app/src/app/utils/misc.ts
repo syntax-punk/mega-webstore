@@ -4,4 +4,11 @@ function getCookie(key: string): string {
   return result
 }
 
-export { getCookie }
+function currencyFormat(amount: number): string {
+  return `$${(amount / 100).toFixed(2)}`;
+}
+
+export { 
+  getCookie,
+  currencyFormat
+}
