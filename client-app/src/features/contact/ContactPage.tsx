@@ -4,7 +4,7 @@ function ContactPage() {
   return (
     <Container>
       <Typography variant="h2">Contact</Typography>
-      <p>This app uses React, Redux, React Router, and many other helpful libraries.</p>
+      <p>This is a Contacts page</p>
     </Container>
   );
 }

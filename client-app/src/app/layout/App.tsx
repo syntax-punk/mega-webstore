@@ -4,13 +4,14 @@ import { Container, CssBaseline, ThemeProvider, createTheme } from "@mui/materia
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useStoreContext } from "../context/StoreContext";
 import { getCookie } from "../utils/misc";
 import { agent } from "../api/agent";
 import { LoadingComponent } from "./LoadingComponent";
+import { useAppDispatch } from "../store/configureStore";
+import { setBasket } from "../../features/basket/basketSlice";
 
 function App() {
-  const { setBasket } = useStoreContext();
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
 
   useEffect(function onMount() {
@@ -19,11 +20,11 @@ function App() {
 
     agent.Basket.get()
       .then(basket => {
-        setBasket(basket);
+        dispatch(setBasket(basket));
       })
       .catch(error => console.error(error))
       .finally(() => setLoading(false));
-  }, [setBasket])
+  }, [dispatch])
 
   const [darkMode, setDarkMode] = useState(true);
 

@@ -6,11 +6,13 @@ import { Product } from "../../app/models/product";
 import { agent } from "../../app/api/agent";
 import { NotFound } from "../../app/errors/NotFound";
 import { LoadingComponent } from "../../app/layout/LoadingComponent";
-import { useStoreContext } from "../../app/context/StoreContext";
 import { BasketItem } from "../../app/models/basket";
+import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
+import { removeItem, setBasket } from "../basket/basketSlice";
 
 function ProductDetails() {
-  const { basket, setBasket, removeItem } = useStoreContext();
+  const dispatch = useAppDispatch();
+  const { basket } = useAppSelector(({ basketSlice }) => basketSlice);
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | undefined>(undefined);
   const [loading, setLoading] = useState(true);
@@ -50,7 +52,7 @@ function ProductDetails() {
 
       try {
         const updatedBasket = await agent.Basket.addItem(product.id, quantityToAdd);
-        setBasket(updatedBasket);
+        dispatch(setBasket(updatedBasket));
       } catch (error) {
         console.error(error);
       } finally {
@@ -61,7 +63,10 @@ function ProductDetails() {
       
       try {
         await agent.Basket.removeItem(product.id, quantityToRemove);
-        removeItem(product.id, quantityToRemove);
+        dispatch(removeItem({
+          productId: product.id,
+          quantity: quantityToRemove
+        }));
       } catch (error) {
         console.error(error);
       } finally {

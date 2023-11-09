@@ -2,7 +2,7 @@ import { AppBar, Badge, Box, IconButton, List, ListItem, Switch, Toolbar, Typogr
 import { accountLinks, navLinks } from "../tools/links";
 import { Link, NavLink } from "react-router-dom";
 import { ShoppingCart } from "@mui/icons-material";
-import { useStoreContext } from "../context/StoreContext";
+import { useAppSelector } from "../store/configureStore";
 interface Props {
   darkMode: boolean;
   handleThemeChange: VoidFunction;
@@ -22,7 +22,7 @@ const navStyles = {
 
 function Header({ darkMode, handleThemeChange }: Props) {
 
-    const { basket } = useStoreContext();
+    const { basket } = useAppSelector(state => state.basketSlice);
     const itemsCount = basket?.items.reduce((current, item) => current + item.quantity || 0, 0);
 
     return (
