@@ -1,13 +1,27 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Basket } from "../../app/models/basket";
+import { agent } from "../../app/api/agent";
 
 interface BasketState {
   basket: Basket | null;
+  status: string;
 }
 
 const initialState: BasketState = {
   basket: null,
+  status: "idle"
 };
+
+export const addBasketItemAsync = createAsyncThunk<Basket, { productId: number, quantity?: number }>(
+  "basket/addBasketItemAsync",
+  async ({ productId, quantity = 1 }) => {
+    try {
+      return await agent.Basket.addItem(productId, quantity);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+)
 
 export const basketSlice = createSlice({
   name: "basket",
@@ -29,6 +43,18 @@ export const basketSlice = createSlice({
         state.basket.items[itemIndex].quantity -= quantity;
       }
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(addBasketItemAsync.pending, (state, action) => {
+      state.status = "pendingAddItem" + action.meta.arg.productId;
+    }),
+    builder.addCase(addBasketItemAsync.fulfilled, (state, action) => {
+      state.basket = action.payload;
+      state.status = "idle";
+    }),
+    builder.addCase(addBasketItemAsync.rejected, (state) => {
+      state.status = "idle";
+    })
   }
 });
 
