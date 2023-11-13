@@ -8,15 +8,14 @@ import { NotFound } from "../../app/errors/NotFound";
 import { LoadingComponent } from "../../app/layout/LoadingComponent";
 import { BasketItem } from "../../app/models/basket";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { removeItem, setBasket } from "../basket/basketSlice";
+import { addBasketItemAsync, removeBasketItemAsync } from "../basket/basketSlice";
 
 function ProductDetails() {
   const dispatch = useAppDispatch();
-  const { basket } = useAppSelector(({ basketSlice }) => basketSlice);
+  const { basket, status } = useAppSelector(({ basketSlice }) => basketSlice);
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | undefined>(undefined);
   const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
   const [quantity, setQuantity] = useState(0);
   const [item, setItem] = useState<BasketItem | undefined>(undefined);
   
@@ -45,33 +44,21 @@ function ProductDetails() {
 
   async function handleUpdateCart() {
     if (!product) return;
-
-    setSubmitting(true);
+    
     if (!item || quantity > item.quantity) {
       const quantityToAdd = item ? quantity - item.quantity : quantity;
 
-      try {
-        const updatedBasket = await agent.Basket.addItem(product.id, quantityToAdd);
-        dispatch(setBasket(updatedBasket));
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setSubmitting(false);
-      }
+      dispatch(addBasketItemAsync({
+        productId: product.id,
+        quantity: quantityToAdd
+      }));
     } else {
       const quantityToRemove = item.quantity - quantity;
-      
-      try {
-        await agent.Basket.removeItem(product.id, quantityToRemove);
-        dispatch(removeItem({
-          productId: product.id,
-          quantity: quantityToRemove
-        }));
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setSubmitting(false);
-      }
+
+      dispatch(removeBasketItemAsync({
+        productId: product.id,
+        quantity: quantityToRemove
+      }));
     }
   }
 
@@ -85,6 +72,8 @@ function ProductDetails() {
   if (loading) return <LoadingComponent message="Loading product ..." />;
 
   if (!product) return <NotFound />;
+
+  const isLoading = status.includes("pendingRemoveItem" + product.id) || status.includes("pendingAddItem" + product.id)
 
   return (
     <Grid container spacing={6}>
@@ -148,7 +137,7 @@ function ProductDetails() {
               variant="contained"
               fullWidth
               disabled={isButtonDisabled()}
-              loading={submitting}
+              loading={isLoading}
               onClick={handleUpdateCart}
             >
               {item ? 'Update Cart' : 'Add to Cart'}

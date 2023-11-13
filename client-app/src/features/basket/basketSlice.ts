@@ -12,7 +12,7 @@ const initialState: BasketState = {
   status: "idle"
 };
 
-export const addBasketItemAsync = createAsyncThunk<Basket, { productId: number, quantity?: number }>(
+const addBasketItemAsync = createAsyncThunk<Basket, { productId: number, quantity?: number }>(
   "basket/addBasketItemAsync",
   async ({ productId, quantity = 1 }) => {
     try {
@@ -23,25 +23,23 @@ export const addBasketItemAsync = createAsyncThunk<Basket, { productId: number, 
   }
 )
 
-export const basketSlice = createSlice({
+const removeBasketItemAsync = createAsyncThunk<void, { productId: number, quantity?: number, del?: boolean }>(
+  "basket/removeBasketItemAsync",
+  async ({ productId, quantity = 1 }) => {
+    try {
+      return await agent.Basket.removeItem(productId, quantity);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+const basketSlice = createSlice({
   name: "basket",
   initialState,
   reducers: {
     setBasket: (state, action) => {
       state.basket = action.payload;
-    },
-    removeItem: (state, action) => {
-      if (!state.basket) return;
-      const { productId, quantity } = action.payload;
-      
-      const itemIndex = state.basket.items.findIndex(item => item.productId === productId);
-      if (itemIndex === -1) return;
-
-      if (state.basket.items[itemIndex].quantity <= quantity) {
-        state.basket.items.splice(itemIndex, 1);
-      } else {
-        state.basket.items[itemIndex].quantity -= quantity;
-      }
     }
   },
   extraReducers: (builder) => {
@@ -54,11 +52,41 @@ export const basketSlice = createSlice({
     }),
     builder.addCase(addBasketItemAsync.rejected, (state) => {
       state.status = "idle";
+    }),
+
+    builder.addCase(removeBasketItemAsync.pending, (state, action) => {
+      const { productId, del } = action.meta.arg;
+      state.status = del 
+        ? "pendingDeleteItem" + productId
+        : "pendingRemoveItem" + productId;
+    }),
+    builder.addCase(removeBasketItemAsync.fulfilled, (state, action) => {
+      state.status = "idle";
+      if (!state.basket) return;
+
+      const { productId, quantity = 1 } = action.meta.arg;
+
+      const itemIndex = state.basket.items.findIndex(item => item.productId === productId);
+      if (itemIndex === -1) return;
+
+      if (state.basket.items[itemIndex].quantity <= quantity) {
+        state.basket.items.splice(itemIndex, 1);
+      } else {
+        state.basket.items[itemIndex].quantity -= quantity;
+      }
+    }),
+    builder.addCase(removeBasketItemAsync.rejected, (state) => {
+      state.status = "idle";
     })
   }
 });
 
 export const { 
-  setBasket, 
-  removeItem 
+  setBasket,
 } = basketSlice.actions;
+
+export {
+  basketSlice,
+  addBasketItemAsync,
+  removeBasketItemAsync
+}
