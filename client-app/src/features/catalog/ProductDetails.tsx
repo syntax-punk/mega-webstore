@@ -2,31 +2,29 @@ import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, T
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
-import { Product } from "../../app/models/product";
-import { agent } from "../../app/api/agent";
 import { NotFound } from "../../app/errors/NotFound";
 import { LoadingComponent } from "../../app/layout/LoadingComponent";
 import { BasketItem } from "../../app/models/basket";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
 import { addBasketItemAsync, removeBasketItemAsync } from "../basket/basketSlice";
+import { fetchProductAsync, productsSelectors } from "./catalogSlice";
 
 function ProductDetails() {
   const dispatch = useAppDispatch();
   const { basket, status } = useAppSelector(({ basketSlice }) => basketSlice);
   const { id } = useParams<{ id: string }>();
-  const [product, setProduct] = useState<Product | undefined>(undefined);
-  const [loading, setLoading] = useState(true);
+  const product = useAppSelector(state => productsSelectors.selectById(state, id!))
+  const { status: productStatus } = useAppSelector(({ catalogSlice }) => catalogSlice);
+
   const [quantity, setQuantity] = useState(0);
   const [item, setItem] = useState<BasketItem | undefined>(undefined);
   
-  useEffect(function fetchProduct() {
+  useEffect(function onMount() {
     if (!id) return;
+    if (product) return;
     
-    agent.Catalog.details(parseInt(id))
-      .then(response => setProduct(response))
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false));
-  }, [id]);
+    dispatch (fetchProductAsync(parseInt(id)));
+  }, [dispatch, id, product]);
 
   useEffect(function updateQuantity() {
     if (!product || !basket) return;
@@ -69,7 +67,7 @@ function ProductDetails() {
     return false;
   }
 
-  if (loading) return <LoadingComponent message="Loading product ..." />;
+  if (productStatus.includes("pending")) return <LoadingComponent message="Loading product ..." />;
 
   if (!product) return <NotFound />;
 

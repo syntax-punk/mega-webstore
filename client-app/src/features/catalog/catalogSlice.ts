@@ -5,11 +5,22 @@ import { RootState } from "../../app/store/configureStore";
 
 const productAdapter = createEntityAdapter<Product>();
 
-export const fetchProductsAsync = createAsyncThunk(
+export const fetchProductsAsync = createAsyncThunk<Product[]>(
   'catalog/fetchProductsAsync',
   async () => {
     try {
       return await agent.Catalog.list();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+export const fetchProductAsync = createAsyncThunk<Product, number>(
+  'catalog/fetchProductAsync',
+  async (id: number) => {
+    try {
+      return await agent.Catalog.details(id);
     } catch (error) {
       console.error(error);
     }
@@ -26,15 +37,26 @@ export const catalogSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchProductsAsync.pending, (state) => {
       state.status = "pendingFetchProducts"
-    }),
+    });
     builder.addCase(fetchProductsAsync.fulfilled, (state, action) => {
       productAdapter.setAll(state, action.payload);
       state.status = "idle";
       state.productsLoaded = true;
-    }),
+    });
     builder.addCase(fetchProductsAsync.rejected, (state) => {
       state.status = "idle";
-    })
+    });
+
+    builder.addCase(fetchProductAsync.pending, (state) => {
+      state.status = "pendingFetchProduct"
+    });
+    builder.addCase(fetchProductAsync.fulfilled, (state, action) => {
+      productAdapter.upsertOne(state, action.payload);
+      state.status = "idle";
+    });
+    builder.addCase(fetchProductAsync.rejected, (state) => {
+      state.status = "idle";
+    });
   }
 });
 
