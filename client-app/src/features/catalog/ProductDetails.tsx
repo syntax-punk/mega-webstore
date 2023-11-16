@@ -71,8 +71,6 @@ function ProductDetails() {
 
   if (!product) return <NotFound />;
 
-  const isLoading = status.includes("pendingRemoveItem" + product.id) || status.includes("pendingAddItem" + product.id)
-
   return (
     <Grid container spacing={6}>
       <Grid item xs={6}>
@@ -135,7 +133,7 @@ function ProductDetails() {
               variant="contained"
               fullWidth
               disabled={isButtonDisabled()}
-              loading={isLoading}
+              loading={status.includes("pending")}
               onClick={handleUpdateCart}
             >
               {item ? 'Update Cart' : 'Add to Cart'}
