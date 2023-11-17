@@ -11,7 +11,7 @@ export const fetchProductsAsync = createAsyncThunk<Product[]>(
     try {
       return await agent.Catalog.list();
     } catch (error: any) {
-      thunkAPI.rejectWithValue({
+      return thunkAPI.rejectWithValue({
         error: error.data
       });
     }
@@ -24,7 +24,7 @@ export const fetchProductAsync = createAsyncThunk<Product, number>(
     try {
       return await agent.Catalog.details(id);
     } catch (error: any) {
-      thunkAPI.rejectWithValue({
+      return thunkAPI.rejectWithValue({
         error: error.data
       });
     }
