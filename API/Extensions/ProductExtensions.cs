@@ -7,7 +7,7 @@ namespace API.Extensions
         public static IQueryable<Product> Sort(this IQueryable<Product> query, string orderBy) 
         {
             if (string.IsNullOrWhiteSpace(orderBy)) return query.OrderBy(p => p.Name);
-            
+
             query = orderBy switch
             {
                 "price" => query.OrderBy(p => p.Price),
@@ -15,6 +15,15 @@ namespace API.Extensions
                 _ => query.OrderBy(p => p.Name)
             };
 
+            return query;
+        }
+
+        public static IQueryable<Product> Search(this IQueryable<Product> query, string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm)) return query;
+
+            query = query
+                .Where(p => p.Name.ToLower().Contains(searchTerm.ToLower().Trim()));
             return query;
         }
     }
