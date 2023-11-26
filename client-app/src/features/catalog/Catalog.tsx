@@ -4,6 +4,7 @@ import { LoadingComponent } from "../../app/layout/LoadingComponent";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
 import { fetchFiltersAsync, fetchProductsAsync, productsSelectors } from "./catalogSlice";
 import { Box, Checkbox, FormControl, FormControlLabel, FormGroup, Grid, Pagination, Paper, Radio, RadioGroup, TextField, Typography } from "@mui/material";
+import { ProductSearch } from "./ProductSearch";
 
 const sortOptions = [
   { value: 'name', label: 'Alphabetical' },
@@ -33,7 +34,7 @@ function Catalog() {
     <Grid container spacing={4}>
       <Grid item xs={3}>
         <Paper sx={{mb: 2}}>
-          <TextField label="Search" variant="outlined" fullWidth />
+          <ProductSearch />
         </Paper>
         <Paper sx={{mb: 2, p: 2}}>
           <FormControl>

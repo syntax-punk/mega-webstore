@@ -1719,11 +1719,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/voogie/playground/dontnet/E-Commerce/mega-webstore/API/API.csproj",
+      "projectUniqueName": "/Users/voogie/p/dontnet/E-Commerce/mega-webstore/API/API.csproj",
       "projectName": "API",
-      "projectPath": "/Users/voogie/playground/dontnet/E-Commerce/mega-webstore/API/API.csproj",
+      "projectPath": "/Users/voogie/p/dontnet/E-Commerce/mega-webstore/API/API.csproj",
       "packagesPath": "/Users/voogie/.nuget/packages/",
-      "outputPath": "/Users/voogie/playground/dontnet/E-Commerce/mega-webstore/API/obj/",
+      "outputPath": "/Users/voogie/p/dontnet/E-Commerce/mega-webstore/API/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/voogie/.nuget/NuGet/NuGet.Config"
