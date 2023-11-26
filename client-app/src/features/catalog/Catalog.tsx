@@ -2,9 +2,10 @@ import { useEffect } from "react";
 import { ProductList } from "./ProductList";
 import { LoadingComponent } from "../../app/layout/LoadingComponent";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { fetchFiltersAsync, fetchProductsAsync, productsSelectors } from "./catalogSlice";
-import { Box, Checkbox, FormControl, FormControlLabel, FormGroup, Grid, Pagination, Paper, Radio, RadioGroup, TextField, Typography } from "@mui/material";
+import { fetchFiltersAsync, fetchProductsAsync, productsSelectors, setProductParams } from "./catalogSlice";
+import { Box, Checkbox, FormControlLabel, FormGroup, Grid, Pagination, Paper, Radio, RadioGroup, TextField, Typography } from "@mui/material";
 import { ProductSearch } from "./ProductSearch";
+import { RadioButtonGroup } from "../../app/components/RadioButtonGroup";
 
 const sortOptions = [
   { value: 'name', label: 'Alphabetical' },
@@ -14,7 +15,7 @@ const sortOptions = [
 
 function Catalog() {
   const products = useAppSelector(productsSelectors.selectAll);
-  const { productsLoaded, filtersLoaded, status, brands, types } = useAppSelector(({ catalogSlice }) => catalogSlice);
+  const { productsLoaded, filtersLoaded, status, brands, types, productParams } = useAppSelector(({ catalogSlice }) => catalogSlice);
   const dispatch = useAppDispatch();
 
   useEffect(function fetchProductsOnMount() {
@@ -37,13 +38,13 @@ function Catalog() {
           <ProductSearch />
         </Paper>
         <Paper sx={{mb: 2, p: 2}}>
-          <FormControl>
-            <RadioGroup>
-              {sortOptions.map(({ value, label }, idx) => (
-                <FormControlLabel key={idx} value={value} control={<Radio />} label={label} />
-              ))}
-            </RadioGroup>
-          </FormControl>
+        <RadioButtonGroup 
+          options={sortOptions} 
+          selectedValue={productParams.orderBy}
+          onChange={(event) => {
+            dispatch(setProductParams({ orderBy: event.target.value  }))
+          }}
+        />
         </Paper>
         <Paper sx={{mb: 2, p: 2}}>
           <FormGroup>
