@@ -3,9 +3,10 @@ import { ProductList } from "./ProductList";
 import { LoadingComponent } from "../../app/layout/LoadingComponent";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
 import { fetchFiltersAsync, fetchProductsAsync, productsSelectors, setProductParams } from "./catalogSlice";
-import { Box, Checkbox, FormControlLabel, FormGroup, Grid, Pagination, Paper, Radio, RadioGroup, TextField, Typography } from "@mui/material";
+import { Box, Grid, Pagination, Paper, Typography } from "@mui/material";
 import { ProductSearch } from "./ProductSearch";
 import { RadioButtonGroup } from "../../app/components/RadioButtonGroup";
+import { CheckboxButtons } from "../../app/components/CheckboxButtons";
 
 const sortOptions = [
   { value: 'name', label: 'Alphabetical' },
@@ -47,18 +48,16 @@ function Catalog() {
         />
         </Paper>
         <Paper sx={{mb: 2, p: 2}}>
-          <FormGroup>
-            {brands.map((brand, idx) => (
-              <FormControlLabel key={idx} control={<Checkbox />} label={brand} />
-            ))}
-          </FormGroup>
+          <CheckboxButtons 
+            items={brands} 
+            checked={productParams.brands}
+            onChange={(values: string[]) => dispatch(setProductParams({ brands: values }))} />
         </Paper>
         <Paper sx={{mb: 2, p: 2}}>
-          <FormGroup>
-            {types.map((type, idx) => (
-              <FormControlLabel key={idx} control={<Checkbox />} label={type} />
-            ))}
-          </FormGroup>
+          <CheckboxButtons 
+            items={types} 
+            checked={productParams.types}
+            onChange={(values: string[]) => dispatch(setProductParams({ types: values }))} />
         </Paper>
       </Grid>
       <Grid item xs={9}>
