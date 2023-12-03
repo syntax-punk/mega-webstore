@@ -11,7 +11,7 @@ interface CatalogState {
   brands: string[],
   types: string[],
   productParams: ProductParams,
-  metadate: Metadata | null
+  metadata: Metadata | null
 }
 
 function initParams(): ProductParams {
@@ -19,6 +19,8 @@ function initParams(): ProductParams {
     pageNumber: 1,
     pageSize: 6,
     orderBy: "name",
+    brands: [],
+    types: [],
   }
 }
 
@@ -30,8 +32,8 @@ function getAxiosParams(productParams: ProductParams): URLSearchParams {
   params.append("pageSize", productParams.pageSize.toString());
   params.append("orderBy", productParams.orderBy);
   if (productParams.searchTerm) params.append("searchTerm", productParams.searchTerm);
-  if (productParams.types) params.append("types", productParams.types.toString());
-  if (productParams.brands) params.append("brands", productParams.brands.toString());
+  if (productParams.types.length) params.append("types", productParams.types.toString());
+  if (productParams.brands.length) params.append("brands", productParams.brands.toString());
   return params;
 }
 
@@ -84,15 +86,19 @@ export const catalogSlice = createSlice({
     brands: [],
     types: [],
     productParams: initParams(),
-    metadate: null
+    metadata: null
   }),
   reducers: {
     setProductParams: (state, action) => {
       state.productsLoaded = false;
+      state.productParams = { ...state.productParams, ...action.payload, pageNumber: 1 };
+    },
+    setPageNumber: (state, action) => {
+      state.productsLoaded = false;
       state.productParams = { ...state.productParams, ...action.payload };
     },
     setMetadata: (state, action) => {
-      state.metadate = action.payload;
+      state.metadata = action.payload;
     },
     resetProductParams: (state) => {
       state.productParams = initParams();
@@ -149,4 +155,4 @@ export const catalogSlice = createSlice({
 
 export const productsSelectors = productAdapter.getSelectors((state: RootState) => state.catalogSlice);
 
-export const { setProductParams, setMetadata, resetProductParams } = catalogSlice.actions;
+export const { setProductParams, setMetadata, resetProductParams, setPageNumber } = catalogSlice.actions;

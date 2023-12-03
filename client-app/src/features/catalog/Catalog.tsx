@@ -2,11 +2,12 @@ import { useEffect } from "react";
 import { ProductList } from "./ProductList";
 import { LoadingComponent } from "../../app/layout/LoadingComponent";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { fetchFiltersAsync, fetchProductsAsync, productsSelectors, setProductParams } from "./catalogSlice";
+import { fetchFiltersAsync, fetchProductsAsync, productsSelectors, setPageNumber, setProductParams } from "./catalogSlice";
 import { Box, Grid, Pagination, Paper, Typography } from "@mui/material";
 import { ProductSearch } from "./ProductSearch";
 import { RadioButtonGroup } from "../../app/components/RadioButtonGroup";
 import { CheckboxButtons } from "../../app/components/CheckboxButtons";
+import { AppPagination } from "../../app/components/AppPagination";
 
 const sortOptions = [
   { value: 'name', label: 'Alphabetical' },
@@ -16,7 +17,7 @@ const sortOptions = [
 
 function Catalog() {
   const products = useAppSelector(productsSelectors.selectAll);
-  const { productsLoaded, filtersLoaded, status, brands, types, productParams } = useAppSelector(({ catalogSlice }) => catalogSlice);
+  const { productsLoaded, filtersLoaded, status, brands, types, productParams, metadata } = useAppSelector(({ catalogSlice }) => catalogSlice);
   const dispatch = useAppDispatch();
 
   useEffect(function fetchProductsOnMount() {
@@ -30,10 +31,10 @@ function Catalog() {
     
   }, [dispatch, filtersLoaded])
 
-  if (status.includes("pending")) return <LoadingComponent message="Getting data ready ..."/>
+  if (status.includes("pending") || !metadata) return <LoadingComponent message="Getting data ready ..."/>
 
   return (
-    <Grid container spacing={4}>
+    <Grid container columnSpacing={4}>
       <Grid item xs={3}>
         <Paper sx={{mb: 2}}>
           <ProductSearch />
@@ -64,13 +65,12 @@ function Catalog() {
         <ProductList products={products } />
       </Grid>
       <Grid item xs={3} />
-      <Grid item xs={9}>
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography>
-            Displaying 1-6 of 20
-          </Typography>
-          <Pagination count={10} color="primary" size="large" page={2} />
-        </Box>
+      <Grid item xs={9} sx={{ mt: 2, mb: 2 }}>
+        <AppPagination 
+          metadata={metadata} 
+          onPageChange={(page: number) => {
+            dispatch(setPageNumber({ pageNumber: page }))
+          }} />
       </Grid>
     </Grid>
   )
