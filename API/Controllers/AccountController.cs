@@ -1,5 +1,6 @@
 using API.DTOs;
 using API.Entities;
+using API.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,20 +10,27 @@ namespace API.Controllers
     public class AccountController : BaseApiController
     {
         private readonly UserManager<User> _userManager;
-        public AccountController(UserManager<User> userManager)
+        private readonly TokenService _tokenService;
+
+        public AccountController(UserManager<User> userManager, TokenService tokenService)
         {
+            _tokenService = tokenService;
             _userManager = userManager;
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<User>> Login(LoginDto login)
+        public async Task<ActionResult<UserDto>> Login(LoginDto login)
         {
             var user = await _userManager.FindByNameAsync(login.Username);
 
             if (user == null || !await _userManager.CheckPasswordAsync(user, login.Password))
                 return Unauthorized("Invalid username or password");
 
-            return user;
+            return new UserDto
+            {
+                Email = user.Email,
+                Token = await _tokenService.GenerateToken(user),
+            };
         }
 
         [HttpPost("register")]
