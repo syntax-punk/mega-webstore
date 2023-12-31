@@ -8,18 +8,28 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Paper } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { agent } from '../../app/api/agent';
 
 
 
 function Login() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+
+  const [values, setValues] = useState({
+    username: '',
+    password: ''
+  });
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    await agent.Account.login(values);
   };
+
+  function onInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = event.target;
+
+    setValues(prev => ({ ...prev, [name]: value }));
+  }
 
   return (
   <Container 
@@ -35,23 +45,21 @@ function Login() {
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
         <TextField
           margin="normal"
-          required
           fullWidth
-          id="email"
-          label="Email Address"
-          name="email"
-          autoComplete="email"
+          label="Username"
+          name="username"
+          value={values.username}
+          onChange={onInputChange}
           autoFocus
         />
         <TextField
           margin="normal"
-          required
           fullWidth
           name="password"
           label="Password"
           type="password"
-          id="password"
-          autoComplete="current-password"
+          value={values.password }
+          onChange={onInputChange} 
         />
         <Button
           type="submit"
