@@ -1,5 +1,4 @@
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -8,27 +7,19 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Paper } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
 import { agent } from '../../app/api/agent';
+import { FieldValues, useForm } from 'react-hook-form';
+import { LoadingButton } from '@mui/lab';
 
 
 
 function Login() {
 
-  const [values, setValues] = useState({
-    username: '',
-    password: ''
-  });
+  const { register, handleSubmit, formState: { isSubmitting } } = useForm();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    await agent.Account.login(values);
-  };
+  async function submitForm(data: FieldValues) {
+    await agent.Account.login(data);
 
-  function onInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = event.target;
-
-    setValues(prev => ({ ...prev, [name]: value }));
   }
 
   return (
@@ -42,33 +33,34 @@ function Login() {
       <Typography component="h1" variant="h5">
         Sign in
       </Typography>
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+      <Box component="form" onSubmit={handleSubmit(submitForm)} noValidate sx={{ mt: 1 }}>
         <TextField
           margin="normal"
           fullWidth
           label="Username"
-          name="username"
-          value={values.username}
-          onChange={onInputChange}
           autoFocus
+          {
+            ...register('username')
+          }
         />
         <TextField
           margin="normal"
           fullWidth
-          name="password"
           label="Password"
           type="password"
-          value={values.password }
-          onChange={onInputChange} 
+          {
+            ...register('password')
+          }
         />
-        <Button
+        <LoadingButton
           type="submit"
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
+          loading={isSubmitting}
         >
           Sign In
-        </Button>
+        </LoadingButton>
         <Grid container>
           <Grid item>
             <Link to="/register">
