@@ -15,11 +15,16 @@ import { LoadingButton } from '@mui/lab';
 
 function Login() {
 
-  const { register, handleSubmit, formState: { isSubmitting } } = useForm();
+  const { register, handleSubmit, formState: { isSubmitting, errors, isValid } } = useForm({
+    mode: 'onTouched'
+  });
 
   async function submitForm(data: FieldValues) {
-    await agent.Account.login(data);
-
+    try {
+      await agent.Account.login(data);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -40,8 +45,10 @@ function Login() {
           label="Username"
           autoFocus
           {
-            ...register('username')
+            ...register('username', { required: 'Username is required' })
           }
+          error={!!errors.username}
+          helperText={errors?.username?.message as string}
         />
         <TextField
           margin="normal"
@@ -49,8 +56,10 @@ function Login() {
           label="Password"
           type="password"
           {
-            ...register('password')
+            ...register('password', { required: 'Password is required' })
           }
+          error={!!errors.password}
+          helperText={errors?.password?.message as string}
         />
         <LoadingButton
           type="submit"
@@ -58,6 +67,7 @@ function Login() {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
           loading={isSubmitting}
+          disabled={!isValid || isSubmitting}
         >
           Sign In
         </LoadingButton>
