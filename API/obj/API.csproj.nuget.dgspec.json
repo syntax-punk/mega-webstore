@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/voogie/p/dontnet/E-Commerce/mega-webstore/API/API.csproj": {}
+    "/Users/david/p/udemy/e-commerce/mega-webstore/API/API.csproj": {}
   },
   "projects": {
-    "/Users/voogie/p/dontnet/E-Commerce/mega-webstore/API/API.csproj": {
+    "/Users/david/p/udemy/e-commerce/mega-webstore/API/API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/voogie/p/dontnet/E-Commerce/mega-webstore/API/API.csproj",
+        "projectUniqueName": "/Users/david/p/udemy/e-commerce/mega-webstore/API/API.csproj",
         "projectName": "API",
-        "projectPath": "/Users/voogie/p/dontnet/E-Commerce/mega-webstore/API/API.csproj",
-        "packagesPath": "/Users/voogie/.nuget/packages/",
-        "outputPath": "/Users/voogie/p/dontnet/E-Commerce/mega-webstore/API/obj/",
+        "projectPath": "/Users/david/p/udemy/e-commerce/mega-webstore/API/API.csproj",
+        "packagesPath": "/Users/david/.nuget/packages/",
+        "outputPath": "/Users/david/p/udemy/e-commerce/mega-webstore/API/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/voogie/.nuget/NuGet/NuGet.Config"
+          "/Users/david/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -84,7 +84,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.402/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.101/RuntimeIdentifierGraph.json"
         }
       }
     }
