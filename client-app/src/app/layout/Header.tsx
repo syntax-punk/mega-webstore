@@ -3,6 +3,7 @@ import { accountLinks, navLinks } from "../tools/links";
 import { Link, NavLink } from "react-router-dom";
 import { ShoppingCart } from "@mui/icons-material";
 import { useAppSelector } from "../store/configureStore";
+import { SignedInMenu } from "./SignedInMenu";
 interface Props {
   darkMode: boolean;
   handleThemeChange: VoidFunction;
@@ -23,6 +24,7 @@ const navStyles = {
 function Header({ darkMode, handleThemeChange }: Props) {
 
     const { basket } = useAppSelector(state => state.basketSlice);
+    const { user } = useAppSelector(state => state.accountSlice);
     const itemsCount = basket?.items.reduce((current, item) => current + item.quantity || 0, 0);
 
     return (
@@ -53,17 +55,19 @@ function Header({ darkMode, handleThemeChange }: Props) {
                 <ShoppingCart />
               </Badge>
             </IconButton>
-            <List sx={{ display: 'flex' }}>
-              { accountLinks.map(({ title, path }) => (
-                <ListItem 
-                  key={path} 
-                  component={NavLink} 
-                  to={path} 
-                  sx={navStyles}>
-                    {title.toUpperCase()}
-                </ListItem>
-              ))}
-            </List>
+            {user ? (<SignedInMenu />) : (
+              <List sx={{ display: 'flex' }}>
+                { accountLinks.map(({ title, path }) => (
+                  <ListItem 
+                    key={path} 
+                    component={NavLink} 
+                    to={path} 
+                    sx={navStyles}>
+                      {title.toUpperCase()}
+                  </ListItem>
+                ))}
+              </List>
+            )}
           </Box>
         </Toolbar>
       </AppBar>      
