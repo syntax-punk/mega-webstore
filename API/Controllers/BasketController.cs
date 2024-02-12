@@ -76,12 +76,10 @@ namespace API.Controllers
                 return null;
             }
 
-            var buyerIdCookie = Request.Cookies["buyerId"];
-
             var basket = await _context.Baskets
                 .Include(b => b.Items)
                 .ThenInclude(i => i.Product)
-                .FirstOrDefaultAsync(b => b.BuyerId == buyerIdCookie);
+                .FirstOrDefaultAsync(b => b.BuyerId == buyerId);
             return basket;
         }
 
