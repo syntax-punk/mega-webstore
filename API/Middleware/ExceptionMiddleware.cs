@@ -29,7 +29,7 @@ namespace API.Middleware
                 _logger.LogError(ex, ex.Message);
                 context.Response.ContentType = "application/json"; // set the response type to json
                 context.Response.StatusCode = 500; // set the status code to 500
-                
+
                 var problemDetails = new ProblemDetails
                 {
                     Status = 500,
