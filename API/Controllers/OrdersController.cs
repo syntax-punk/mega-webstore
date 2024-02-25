@@ -3,10 +3,8 @@ using API.DTOs;
 using API.Entities.OrderAggregate;
 using API.Extensions;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
 
 namespace API.Controllers
 {
@@ -21,19 +19,19 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Order>>> GetOrders()
+        public async Task<ActionResult<List<OrderDto>>> GetOrders()
         {
             return await _context.Orders
-                .Include(o => o.OrderItems)
+                .ProjectOrderToOrderDto()
                 .Where(o => o.BuyerId == User.Identity.Name)
                 .ToListAsync();
         }
 
         [HttpGet("{id}", Name = "GetOrder")]
-        public async Task<ActionResult<Order>> GetOrder(int id)
+        public async Task<ActionResult<OrderDto>> GetOrder(int id)
         {
             return await _context.Orders
-                .Include(o => o.OrderItems)
+                .ProjectOrderToOrderDto()
                 .Where(o => o.Id == id && o.BuyerId == User.Identity.Name)
                 .FirstOrDefaultAsync();
         }
