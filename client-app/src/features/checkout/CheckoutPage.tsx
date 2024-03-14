@@ -6,6 +6,10 @@ import { Review } from "./Review";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validationSchemas } from "./checkoutValidation";
+import { agent } from "../../app/api/agent";
+import { useAppDispatch } from "../../app/store/configureStore";
+import { clearBasket } from "../basket/basketSlice";
+import { LoadingButton } from "@mui/lab";
 
 const steps = ['Shipping address', 'Review your order', 'Payment details'];
 
@@ -23,19 +27,36 @@ function getStepContent(step: number) {
 }
 
 function CheckoutPage() {
+    const [orderNumber, setOrderNumber] = useState(0);
+    const [loading, setLoading] = useState(false);
     const [activeStep, setActiveStep] = useState(0);
     const validationSchema = validationSchemas[activeStep];
+
+    const dispatch = useAppDispatch();
 
     const methods = useForm({
         mode: "onTouched",
         resolver: yupResolver(validationSchema),
     });
 
-    const handleNext = (data: FieldValues) => {
-        if (activeStep === 2) {
-            console.log(data)
+    const handleNext = async (data: FieldValues) => {
+        const { nameOnCard, saveAddress, ...shippingAddress } = data;
+
+        if (activeStep === steps.length - 1) {
+            setLoading(true);
+            try {
+                const orderNr = await agent.Orders.create({saveAddress, shippingAddress});
+                setOrderNumber(orderNr);
+                setActiveStep(activeStep + 1);
+                dispatch(clearBasket());
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        } else {
+            setActiveStep(activeStep + 1);
         }
-        setActiveStep(activeStep + 1);
     };
 
     const handleBack = () => {
@@ -62,9 +83,9 @@ function CheckoutPage() {
                                 Thank you for your order.
                             </Typography>
                             <Typography variant="subtitle1">
-                                Your order number is #2001539. We have emailed your order
-                                confirmation, and will send you an update when your order has
-                                shipped.
+                                Your order number is #{orderNumber}. We have not emailed your order
+                                confirmation, and will not send you an update when your order has
+                                shipped. As this is a demo app, we will not charge your credit card.
                             </Typography>
                         </>
                     ) : (
@@ -76,14 +97,15 @@ function CheckoutPage() {
                                         Back
                                     </Button>
                                 )}
-                                <Button
+                                <LoadingButton
                                     disabled={!methods.formState.isValid || methods.formState.isSubmitting}
                                     variant="contained"
                                     type="submit"
                                     sx={{mt: 3, ml: 1}}
+                                    loading={loading}
                                 >
                                     {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
-                                </Button>
+                                </LoadingButton>
                             </Box>
                         </form>
                     )}

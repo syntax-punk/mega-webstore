@@ -55,6 +55,12 @@ const Account = {
   currentUser: () => requests.get('account/currentUser'), 
 } as const;
 
+const Orders = {
+  list: () => requests.get('orders'),
+  fetch: (id: number) => requests.get(`orders/${id}`),
+  create: (values: any) => requests.post('orders', values),
+} as const;
+
 const TestErrors = {
   get400: () => requests.get('buggy/bad-request'),
   get401: () => requests.get('buggy/unauthorized'),
@@ -66,7 +72,8 @@ const TestErrors = {
 const agent = {
   Catalog,
   Basket,
-  Account, 
+  Account,
+  Orders,
   TestErrors
 }
 
