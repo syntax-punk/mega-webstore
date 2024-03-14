@@ -3,7 +3,6 @@ import { UseControllerProps, useController } from "react-hook-form"
 
 interface Props extends UseControllerProps {
   label: string;
-
 }
 
 function AppTextInput(props: Props) {
