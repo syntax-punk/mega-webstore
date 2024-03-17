@@ -4,7 +4,7 @@ import { AppTextInput } from "../../app/components/AppTextInput";
 import { AppCheckbox } from "../../app/components/AppCheckbox";
 
 function AddressForm() {
-  const { control } = useFormContext();
+  const { control, formState } = useFormContext();
 
   return (
     <>
@@ -62,7 +62,7 @@ function AddressForm() {
           />
         </Grid>
         <Grid item xs={12}>
-          <AppCheckbox 
+          <AppCheckbox
             name="saveAddress"
             label="Save this as the default address"
             control={control}
