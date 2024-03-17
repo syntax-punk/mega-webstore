@@ -2,14 +2,25 @@ import { TableContainer, Paper, Table, TableBody, TableRow, TableCell } from "@m
 import { currencyFormat } from "../../app/utils/misc";
 import { useAppSelector } from "../../app/store/configureStore";
 
-function BasketSummary() {
-    const { basket } = useAppSelector(({ basketSlice }) => basketSlice);
-    if (!basket) return null;
+interface Props {
+    subtotal?: number;
+}
 
-    const subtotal = basket.items
-        .reduce((current, { price, quantity }) => (current + (price * quantity)), 0);
+function BasketSummary({ subtotal }: Props) {
+    const { basket } = useAppSelector(({ basketSlice }) => basketSlice);
+    if (!basket && !subtotal) {
+        throw new Error('Please provide subtotal or make sure basket exsit in order to calculate subtotal');
+        return null;
+    }
+
+    const subtotalValue = subtotal 
+        ? subtotal 
+        : basket
+            ? basket.items
+                .reduce((current, { price, quantity }) => (current + (price * quantity)), 0)
+            : 0;
         
-    const deliveryFee = subtotal > 10000 ? 0 : 2500;
+    const deliveryFee = subtotalValue > 10000 ? 0 : 2500;
 
     return (
       <TableContainer component={Paper} variant={'outlined'}>
@@ -17,7 +28,7 @@ function BasketSummary() {
               <TableBody>
                   <TableRow>
                       <TableCell colSpan={2}>Subtotal</TableCell>
-                      <TableCell align="right">{currencyFormat(subtotal)}</TableCell>
+                      <TableCell align="right">{currencyFormat(subtotalValue)}</TableCell>
                   </TableRow>
                   <TableRow>
                       <TableCell colSpan={2}>Delivery fee*</TableCell>
@@ -25,7 +36,7 @@ function BasketSummary() {
                   </TableRow>
                   <TableRow>
                       <TableCell colSpan={2}>Total</TableCell>
-                      <TableCell align="right">{currencyFormat(subtotal + deliveryFee)}</TableCell>
+                      <TableCell align="right">{currencyFormat(subtotalValue + deliveryFee)}</TableCell>
                   </TableRow>
                   <TableRow>
                       <TableCell>
