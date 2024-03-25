@@ -1,10 +1,10 @@
-import { Typography, Grid, Button } from "@mui/material";
+import { Typography, Grid } from "@mui/material";
 import { useFormContext } from "react-hook-form";
 import { AppTextInput } from "../../app/components/AppTextInput";
 import { AppCheckbox } from "../../app/components/AppCheckbox";
 
 function AddressForm() {
-  const { control, formState } = useFormContext();
+  const { control } = useFormContext();
 
   return (
     <>
@@ -69,7 +69,6 @@ function AddressForm() {
           />
         </Grid>
       </Grid>
-      <Button type="submit">Submit Form</Button>
     </>
   );
 }
