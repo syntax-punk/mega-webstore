@@ -1,4 +1,4 @@
-interface BasketItem {
+export interface BasketItem {
     productId: number;
     name: string;
     price: number;
@@ -8,13 +8,10 @@ interface BasketItem {
     type: string;
 }
 
-interface Basket {
+export interface Basket {
     id: string;
     buyerId: string;
     items: BasketItem[];
-}
-
-export {
-  Basket,
-  BasketItem
+    paymentIntentId?: string;
+    clientSecret?: string;
 }

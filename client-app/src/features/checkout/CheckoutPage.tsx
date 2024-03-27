@@ -7,10 +7,11 @@ import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validationSchemas } from "./checkoutValidation";
 import { agent } from "../../app/api/agent";
-import { useAppDispatch } from "../../app/store/configureStore";
+import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
 import { clearBasket } from "../basket/basketSlice";
 import { LoadingButton } from "@mui/lab";
 import { StripeElementType } from "@stripe/stripe-js";
+import { CardNumberElement, useElements, useStripe } from "@stripe/react-stripe-js";
 
 export type CardState = {
     elementError: {[key in StripeElementType]?: string}
@@ -30,6 +31,9 @@ function CheckoutPage() {
     const [activeStep, setActiveStep] = useState(0);
     const validationSchema = validationSchemas[activeStep];
     const dispatch = useAppDispatch();
+    const { basket } = useAppSelector(state => state.basketSlice);
+    const stripe = useStripe();
+    const elements = useElements();
 
     const [cardState, setCardState] = useState<CardState>({ elementError: {} });
     const [cardComplete, setCardComplete] = useState<CardComplete>({
@@ -37,6 +41,8 @@ function CheckoutPage() {
       cardExpiry: false,
       cardCvc: false
     });
+    const [paymentMessage, setPaymentMessage] = useState("");
+    const [paymentSuccess, setPaymentSuccess] = useState(false);
   
     function onCardInputChange(event: any) {
       setCardState({
@@ -83,22 +89,48 @@ function CheckoutPage() {
         });
     }, [methods]);
 
-
-    const handleNext = async (data: FieldValues) => {
+    async function submitOrder(data: FieldValues) {
+        setLoading(true);
         const { nameOnCard, saveAddress, ...shippingAddress } = data;
+        
+        if (!stripe || !elements) return;
+        if (!basket || !basket.clientSecret) return;
 
-        if (activeStep === steps.length - 1) {
-            setLoading(true);
-            try {
+        try {
+            const cardElement = elements.getElement(CardNumberElement);
+            if (!cardElement) return;
+
+            const paymentResult = await stripe.confirmCardPayment(basket?.clientSecret, {
+                payment_method: {
+                    card: cardElement,
+                    billing_details: {
+                        name: nameOnCard
+                    }
+                }
+            });
+            console.log("paymentResult: ", paymentResult);
+            if (paymentResult.paymentIntent?.status === "succeeded") {
                 const orderNr = await agent.Orders.create({saveAddress, shippingAddress});
                 setOrderNumber(orderNr);
+                setPaymentSuccess(true);
+                setPaymentMessage("Thank you! We have received your payment.");
                 setActiveStep(activeStep + 1);
                 dispatch(clearBasket());
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
+            } else {
+                setPaymentMessage(paymentResult.error?.message || "Sorry, we were unable to process your payment.");
+                setPaymentSuccess(false);
+                setActiveStep(activeStep + 1);
             }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const handleNext = async (data: FieldValues) => {
+        if (activeStep === steps.length - 1) {
+            await submitOrder(data);
         } else {
             setActiveStep(activeStep + 1);
         }
@@ -137,13 +169,22 @@ function CheckoutPage() {
                     {activeStep === steps.length ? (
                         <>
                             <Typography variant="h5" gutterBottom>
-                                Thank you for your order.
+                                {paymentMessage}
                             </Typography>
-                            <Typography variant="subtitle1">
-                                Your order number is #{orderNumber}. We have not emailed your order
-                                confirmation, and will not send you an update when your order has
-                                shipped. As this is a demo app, we will not charge your credit card.
-                            </Typography>
+                            {paymentSuccess 
+                                ? (
+                                    <Typography variant="subtitle1">
+                                        Your order number is #{orderNumber}. We have not emailed your order
+                                        confirmation, and will not send you an update when your order has
+                                        shipped. As this is a demo app, we will not charge your credit card.
+                                    </Typography>
+                                )
+                                : (
+                                    <Button variant="contained" onClick={handleBack}>
+                                        Go back and try again
+                                    </Button>
+                                )
+                            }
                         </>
                     ) : (
                         <form onSubmit={methods.handleSubmit(handleNext)}>
