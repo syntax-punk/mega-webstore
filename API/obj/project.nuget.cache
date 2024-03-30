@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "mLS103mRJ6XfUJi70SGlnq+ebFY3/rB1fv6csop4IqiGiiBPjwHqCjf0T6AyeockcJZgU6c78KQG12FspkJU2g==",
+  "dgSpecHash": "BtrWl9t1o6B46C8VKpoBQt8pOL1/HI/SZ0daL52wMz0U/5w8mLZr7y5pZfRunLZ78MAZZ4TS9FXSwux2O6X1PQ==",
   "success": true,
   "projectFilePath": "/Users/david/p/udemy/e-commerce/mega-webstore/API/API.csproj",
   "expectedPackageFiles": [
@@ -41,6 +41,8 @@
     "/Users/david/.nuget/packages/microsoft.win32.systemevents/6.0.0/microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "/Users/david/.nuget/packages/mono.texttemplating/2.2.1/mono.texttemplating.2.2.1.nupkg.sha512",
     "/Users/david/.nuget/packages/newtonsoft.json/12.0.3/newtonsoft.json.12.0.3.nupkg.sha512",
+    "/Users/david/.nuget/packages/npgsql/7.0.6/npgsql.7.0.6.nupkg.sha512",
+    "/Users/david/.nuget/packages/npgsql.entityframeworkcore.postgresql/7.0.11/npgsql.entityframeworkcore.postgresql.7.0.11.nupkg.sha512",
     "/Users/david/.nuget/packages/sqlitepclraw.bundle_e_sqlite3/2.1.4/sqlitepclraw.bundle_e_sqlite3.2.1.4.nupkg.sha512",
     "/Users/david/.nuget/packages/sqlitepclraw.core/2.1.4/sqlitepclraw.core.2.1.4.nupkg.sha512",
     "/Users/david/.nuget/packages/sqlitepclraw.lib.e_sqlite3/2.1.4/sqlitepclraw.lib.e_sqlite3.2.1.4.nupkg.sha512",
