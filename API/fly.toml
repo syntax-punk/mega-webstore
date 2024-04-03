@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for megastore on 2024-04-02T22:02:41+02:00
+# fly.toml app configuration file generated for megastore on 2024-04-03T09:15:08+02:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -9,6 +9,10 @@ primary_region = 'arn'
 [build]
   image = 'monollect/megastore:latest'
 
+[env]
+  ASPNETCORE_URLS="http://+:8080"
+  StripeSettings__PublishableKey="pk_test_51OvhynDehHzAKmgUUStWbWhtL68TEN92eCr3UW6Vw7k7IS4SMlW20KdEpvp3Qw7suIYaY7JI7t7xp5Q5KV4vAjZ2008hzt2Go7"
+
 [http_service]
   internal_port = 8080
   force_https = true
@@ -18,6 +22,4 @@ primary_region = 'arn'
   processes = ['app']
 
 [[vm]]
-  memory = '512mb'
-  cpu_kind = 'shared'
-  cpus = 1
+  size = 'shared-cpu-1x'
