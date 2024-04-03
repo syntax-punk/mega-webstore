@@ -2,9 +2,12 @@ name: docker-push
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches:
-  #     - 'main'
+  push:
+    branches:
+      - 'main'
+      
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
 jobs:
   docker:
@@ -26,3 +29,14 @@ jobs:
           context: "{{ defaultContext }}:API"
           push: true
           tags: monollect/megastore:latest
+  deploy:
+    needs: docker
+    name: Deploy to FlyIO
+    runs-on: ubuntu-latest
+    concurrency: deploy-group    # optional: ensure only one action runs at a time
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
