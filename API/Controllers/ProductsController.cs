@@ -1,7 +1,9 @@
 using API.Data;
+using API.DTOs;
 using API.Extensions;
 using API.RequestHelpers;
 using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +18,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedList<Product>>> GetProducts([FromQuery]ProductParams productParams)
+        public async Task<ActionResult<PagedList<Product>>> GetProducts([FromQuery] ProductParams productParams)
         {
             var query = _context.Products
                 .Sort(productParams.OrderBy)
@@ -24,7 +26,7 @@ namespace API.Controllers
                 .Filter(productParams.Brands, productParams.Types)
                 .AsQueryable();
 
-            var products = await PagedList<Product>.ToPagedList(query, 
+            var products = await PagedList<Product>.ToPagedList(query,
                 productParams.PageNumber, productParams.PageSize);
 
             Response.AddPaginationHeader(products.Metadata);
@@ -32,18 +34,18 @@ namespace API.Controllers
             return products;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id) 
+        [HttpGet("{id}", Name = "GetProduct")]
+        public async Task<ActionResult<Product>> GetProduct(int id)
         {
             var product = await _context.Products.FindAsync(id);
-            
+
             if (product == null) return NotFound();
 
             return product;
         }
 
         [HttpGet("filters")]
-        public async Task<IActionResult> GetFilters() 
+        public async Task<IActionResult> GetFilters()
         {
             var brands = await _context.Products
                 .Select(p => p.Brand)
@@ -54,9 +56,20 @@ namespace API.Controllers
                 .Select(p => p.Type)
                 .Distinct()
                 .ToListAsync();
-            
-            return Ok(new { brands, types});
+
+            return Ok(new { brands, types });
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<ActionResult<Product>> CreateProduct(CreateProductDto product)
+        {
+            _context.Products.Add(product);
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return CreatedAtRoute("GetProduct", new { Id = product.Id }, product);
+
+            return BadRequest(new ProblemDetails { Title = "Problem creating new product" });
+        }
     }
 }
