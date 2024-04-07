@@ -100,6 +100,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme) // ad
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<StripeService>();
+builder.Services.AddScoped<ImageService>();
 
 var app = builder.Build();
 
