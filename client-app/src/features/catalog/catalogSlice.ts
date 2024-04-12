@@ -102,6 +102,9 @@ export const catalogSlice = createSlice({
     },
     resetProductParams: (state) => {
       state.productParams = initParams();
+    },
+    setProduct: (state, action) => {
+      productAdapter.upsertOne(state, action.payload);
     }
   },
   extraReducers: (builder) => {
@@ -155,4 +158,4 @@ export const catalogSlice = createSlice({
 
 export const productsSelectors = productAdapter.getSelectors((state: RootState) => state.catalogSlice);
 
-export const { setProductParams, setMetadata, resetProductParams, setPageNumber } = catalogSlice.actions;
+export const { setProductParams, setMetadata, resetProductParams, setPageNumber, setProduct } = catalogSlice.actions;
