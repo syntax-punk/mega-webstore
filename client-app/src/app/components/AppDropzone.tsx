@@ -36,11 +36,13 @@ export function AppDropzone(props: Props) {
 
   return (
     <div {...getRootProps()}>
-      <FormControl style={isDragActive ? {...dzStyles, ...dzActive} : dzStyles}>
-        <input {...getInputProps()} />
-        <UploadFile sx={{ fontSize: '92px' }} />
-        <Typography variant='h4'>Drop Image</Typography>
-        <FormHelperText>{fieldState.error?.message}</FormHelperText>
+      <FormControl 
+        style={isDragActive ? {...dzStyles, ...dzActive} : dzStyles} 
+        error={!!fieldState.error}>
+          <input {...getInputProps()} />
+          <UploadFile sx={{ fontSize: '92px' }} />
+          <Typography variant='h4'>Drop Image</Typography>
+          <FormHelperText>{fieldState.error?.message}</FormHelperText>
       </FormControl>
     </div>
   )
