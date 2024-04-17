@@ -12,6 +12,7 @@ appsettings.json
 .DS_Store
 .AppleDouble
 .LSOverride
+.mono
 
 # Icon must end with two \r
 Icon
