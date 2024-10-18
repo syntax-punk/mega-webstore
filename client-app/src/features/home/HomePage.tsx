@@ -23,13 +23,12 @@ function HomePage() {
   }
 
   const sliderSettings = {
-    dots: true,
     infinite: true,
-    speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 3000,
+    speed: 500,
+    autoplaySpeed: 2000,
     pauseOnHover: true,
     cssEase: "linear",
     nextArrow: <SamplePrevArrow />,
@@ -66,7 +65,7 @@ function HomePage() {
       </Slider>
       <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" gap="1rem" sx={{ p:4 }}>
         <Typography variant="h2">
-          welcome to the megastore
+          megastore
         </Typography>
         <Typography component={Link} to="/catalog" sx={navStyles} > 
           go to the catalog

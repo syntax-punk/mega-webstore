@@ -27,18 +27,25 @@ function Header({ darkMode, handleThemeChange }: Props) {
     const { user } = useAppSelector(state => state.accountSlice);
     const itemsCount = basket?.items.reduce((current, item) => current + item.quantity || 0, 0);
 
+    function getHeaderLinks() {
+      if (import.meta.env.MODE === 'development') {
+        return navLinks;
+      }
+      return navLinks.filter(link => link. title === 'catalog');
+    }
+
     return (
       <AppBar position="static">
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Box display='flex' alignItems='center'>
             <Typography variant="h6" component={NavLink} to="/" sx={navStyles}>
-              mega store
+              megastore
             </Typography>
             <Switch checked={darkMode} onChange={handleThemeChange} />
           </Box>
 
           <List sx={{ display: 'flex' }}>
-            { navLinks.map(({ title, path }) => (
+            { getHeaderLinks().map(({ title, path }) => (
               <ListItem 
                 key={path} 
                 component={NavLink} 
