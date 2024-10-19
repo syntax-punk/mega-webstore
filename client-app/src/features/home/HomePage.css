@@ -1,0 +1,9 @@
+#root {
+  height: 100vh;
+}
+
+@media screen and (min-height: 980px) {
+  body {
+    overflow: hidden;
+  }  
+}
