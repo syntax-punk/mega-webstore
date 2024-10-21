@@ -101,7 +101,7 @@ function HomePage() {
       </Slider>
       <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" gap="1rem" sx={{ p:4 }}>
         <Typography variant="h2">
-          megastore
+          mega
         </Typography>
         <Typography component={Link} to="/catalog" sx={navStyles} > 
           catalog
@@ -118,6 +118,7 @@ function HomePage() {
           </div>
         ))}
       </Slider>
+      <span className="madeWithHeart">made with ❤️ by <a href="https://syntaxpunk.com">@syntax-punk 👀</a></span>
     </>
   );
 }

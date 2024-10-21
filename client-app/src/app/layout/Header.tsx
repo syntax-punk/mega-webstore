@@ -39,7 +39,7 @@ function Header({ darkMode, handleThemeChange }: Props) {
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Box display='flex' alignItems='center'>
             <Typography variant="h6" component={NavLink} to="/" sx={navStyles}>
-              megastore
+              mega
             </Typography>
             <Switch checked={darkMode} onChange={handleThemeChange} />
           </Box>
