@@ -8,7 +8,8 @@ export default function DemoAppWarning() {
     top: "25%", 
     border: "12px solid red", 
     backgroundColor: "#FFF", 
-    boxShadow: "12px 12px black, -12px -12px black" 
+    boxShadow: "12px 12px black, -12px -12px black",
+    zIndex: 10,
   } as React.CSSProperties;
   
   return (
